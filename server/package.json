@@ -6,7 +6,8 @@
 	"scripts": {
 		"build": "rimraf dist && npx tsc",
 		"start": "pnpm run build && node dist/index.js",
-		"dev": "pnpm run build && concurrently \"npx tsc -w\" \"nodemon --exec ts-node src/index.ts\""
+		"dev": "pnpm run build && concurrently \"npx tsc -w\" \"nodemon --exec ts-node src/index.ts\"",
+		"seed": "ts-node src/seed/seedMongodb.ts"
 	},
 	"keywords": [],
 	"author": "Mark Wong",
