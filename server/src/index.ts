@@ -5,8 +5,8 @@ import cors from "cors";
 import helmet from "helmet";
 import pino from "pino-http";
 import logger from "./logger";
-import mongoose from "mongoose";
 import { globalErrorHandler } from "./error";
+import connectToMongoDB from "./db";
 /* IMPORT ROUTES */
 
 /* CONFIGURATIONS */
@@ -28,24 +28,20 @@ app.use(globalErrorHandler);
 
 /* ROUTES */
 
-/* MONGOOSE */
-const uri = `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PASSWORD}@giftlinkcluster.donbyon.mongodb.net/?retryWrites=true&w=majority&appName=GiftLinkCluster`;
-
 /* SERVER */
 const port = process.env.PORT || 5001;
 
 async function main() {
 	if (!isProduction) {
 		try {
-			await mongoose.connect(uri);
-
-			console.log("Connected to MongoDB.");
+			await connectToMongoDB();
 
 			app.listen(port, () => {
 				console.log(`Server running on port ${port}...`);
 			});
 		} catch (error) {
-			console.error(error);
+			console.error("Error connecting MongoDB: ", error);
+			return;
 		}
 	}
 }

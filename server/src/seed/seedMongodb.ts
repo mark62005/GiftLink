@@ -1,20 +1,19 @@
 import mongoose from "mongoose";
 import fs from "fs";
 import dotenv from "dotenv";
+import connectToMongoDB from "../db";
 import Gift from "../models/Gift";
 
 dotenv.config();
 
 export default async function seed() {
-	const uri = process.env.MONGO_DB_URI ?? "";
 	const filename = `${__dirname}/data/gifts.json`;
 	const data: { [key: string]: any }[] = JSON.parse(
 		fs.readFileSync(filename, "utf-8")
 	).docs;
 
 	try {
-		await mongoose.connect(uri);
-		console.log("Connected to successfully to server.");
+		await connectToMongoDB();
 
 		// Clear all data
 		await Gift.deleteMany({});
