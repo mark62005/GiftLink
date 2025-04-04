@@ -5,7 +5,7 @@ import logger from "../logger";
 export async function getAllGifts(req: Request, res: Response): Promise<void> {
 	logger.info("/ GET called");
 	try {
-		const gifts = await Gift.find();
+		const gifts = await Gift.find().exec();
 
 		if (gifts === undefined || gifts.length < 1) {
 			res.status(404).json({ message: "Gifts not found." });
@@ -23,7 +23,7 @@ export async function getGiftById(req: Request, res: Response): Promise<void> {
 	logger.info("/:id GET called");
 	try {
 		const { id } = req.params;
-		const gift = await Gift.findById(id);
+		const gift = await Gift.findById(id).exec();
 
 		if (!gift) {
 			res.status(404).json({ message: "Gift not found." });
@@ -57,7 +57,7 @@ export async function updateGift(req: Request, res: Response): Promise<void> {
 	try {
 		const { id } = req.params;
 		const updatedGift = req.body;
-		const gift = await Gift.findByIdAndUpdate(id, { ...updatedGift });
+		const gift = await Gift.findByIdAndUpdate(id, { ...updatedGift }).exec();
 
 		if (!gift) {
 			res.status(404).json({ message: "Gift not found." });
@@ -78,7 +78,7 @@ export async function deleteGift(req: Request, res: Response): Promise<void> {
 	try {
 		const { id } = req.params;
 
-		const giftToDelete = await Gift.findByIdAndDelete(id);
+		const giftToDelete = await Gift.findByIdAndDelete(id).exec();
 
 		if (!giftToDelete) {
 			res.status(404).json({ message: "Gift not found." });
