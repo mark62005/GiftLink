@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import pino from "pino-http";
 import logger from "./logger";
 import { globalErrorHandler } from "./error";
+import sentimentRoutes from "./routes/sentimentRoutes";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -17,6 +18,7 @@ app.use(pino({ logger }));
 app.use(globalErrorHandler);
 
 /* ROUTES */
+app.use("/sentiment", sentimentRoutes);
 
 /* SERVER */
 const port = process.env.PORT || 5002;
