@@ -57,7 +57,12 @@ export async function updateGift(req: Request, res: Response): Promise<void> {
 	try {
 		const { id } = req.params;
 		const updatedGift = req.body;
-		await Gift.findByIdAndUpdate(id, { ...updatedGift });
+		const gift = await Gift.findByIdAndUpdate(id, { ...updatedGift });
+
+		if (!gift) {
+			res.status(404).json({ message: "Gift not found." });
+			return;
+		}
 
 		res.status(200).json({
 			message: `Successfully updated gift with id: ${id}.`,
@@ -65,5 +70,26 @@ export async function updateGift(req: Request, res: Response): Promise<void> {
 	} catch (error) {
 		logger.error(error);
 		res.status(500).json({ message: "Error updating gift." });
+	}
+}
+
+export async function deleteGift(req: Request, res: Response): Promise<void> {
+	logger.info("/:id DELETE called");
+	try {
+		const { id } = req.params;
+
+		const giftToDelete = await Gift.findByIdAndDelete(id);
+
+		if (!giftToDelete) {
+			res.status(404).json({ message: "Gift not found." });
+			return;
+		}
+
+		res.status(200).json({
+			message: `Successfully deleted gift with id: ${id}.`,
+		});
+	} catch (error) {
+		logger.error(error);
+		res.status(500).json({ message: "Error deleting gift." });
 	}
 }
