@@ -44,10 +44,26 @@ export async function createGift(req: Request, res: Response): Promise<void> {
 		const addedGift = await Gift.insertOne(newGift);
 
 		res.status(200).json({
-			message: `Successfully created gift with id:${addedGift._id}, to database.`,
+			message: `Successfully created gift with id: ${addedGift._id}, to database.`,
 		});
 	} catch (error) {
 		logger.error(error);
 		res.status(500).json({ message: "Error creating gift." });
+	}
+}
+
+export async function updateGift(req: Request, res: Response): Promise<void> {
+	logger.info("/:id PUT called");
+	try {
+		const { id } = req.params;
+		const updatedGift = req.body;
+		await Gift.findByIdAndUpdate(id, { ...updatedGift });
+
+		res.status(200).json({
+			message: `Successfully updated gift with id: ${id}.`,
+		});
+	} catch (error) {
+		logger.error(error);
+		res.status(500).json({ message: "Error updating gift." });
 	}
 }
