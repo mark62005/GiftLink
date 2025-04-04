@@ -5,7 +5,7 @@ import logger from "../logger";
 export async function getAllGifts(req: Request, res: Response): Promise<void> {
 	logger.info("/ GET called");
 	try {
-		const gifts = await Gift.find();
+		const gifts = await Gift.find().exec();
 
 		if (gifts === undefined || gifts.length < 1) {
 			res.status(404).json({ message: "Gifts not found." });
@@ -23,7 +23,7 @@ export async function getGiftById(req: Request, res: Response): Promise<void> {
 	logger.info("/:id GET called");
 	try {
 		const { id } = req.params;
-		const gift = await Gift.findById(id);
+		const gift = await Gift.findById(id).exec();
 
 		if (!gift) {
 			res.status(404).json({ message: "Gift not found." });
@@ -40,11 +40,15 @@ export async function getGiftById(req: Request, res: Response): Promise<void> {
 export async function createGift(req: Request, res: Response): Promise<void> {
 	logger.info("/ POST called");
 	try {
-		const newGift = req.body;
-		const addedGift = await Gift.insertOne(newGift);
+		const gift = req.body;
+		const newGift = new Gift({
+			...gift,
+		});
+
+		await newGift.save();
 
 		res.status(200).json({
-			message: `Successfully created gift with id: ${addedGift._id}, to database.`,
+			message: `Successfully created gift with id: ${newGift._id}, to database.`,
 		});
 	} catch (error) {
 		logger.error(error);
@@ -57,12 +61,15 @@ export async function updateGift(req: Request, res: Response): Promise<void> {
 	try {
 		const { id } = req.params;
 		const updatedGift = req.body;
-		const gift = await Gift.findByIdAndUpdate(id, { ...updatedGift });
+		let giftToUpdate = await Gift.findById(id);
 
-		if (!gift) {
+		if (!giftToUpdate || giftToUpdate === null) {
 			res.status(404).json({ message: "Gift not found." });
 			return;
 		}
+
+		giftToUpdate = { ...giftToUpdate, ...updatedGift };
+		await giftToUpdate?.save();
 
 		res.status(200).json({
 			message: `Successfully updated gift with id: ${id}.`,
@@ -78,12 +85,14 @@ export async function deleteGift(req: Request, res: Response): Promise<void> {
 	try {
 		const { id } = req.params;
 
-		const giftToDelete = await Gift.findByIdAndDelete(id);
+		const giftToDelete = await Gift.findById(id).exec();
 
 		if (!giftToDelete) {
 			res.status(404).json({ message: "Gift not found." });
 			return;
 		}
+
+		await giftToDelete.deleteOne();
 
 		res.status(200).json({
 			message: `Successfully deleted gift with id: ${id}.`,
