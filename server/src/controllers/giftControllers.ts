@@ -57,12 +57,15 @@ export async function updateGift(req: Request, res: Response): Promise<void> {
 	try {
 		const { id } = req.params;
 		const updatedGift = req.body;
-		const gift = await Gift.findByIdAndUpdate(id, { ...updatedGift }).exec();
+		let giftToUpdate = await Gift.findById(id);
 
-		if (!gift) {
+		if (!giftToUpdate || giftToUpdate === null) {
 			res.status(404).json({ message: "Gift not found." });
 			return;
 		}
+
+		giftToUpdate = { ...giftToUpdate, ...updatedGift };
+		giftToUpdate?.save();
 
 		res.status(200).json({
 			message: `Successfully updated gift with id: ${id}.`,
