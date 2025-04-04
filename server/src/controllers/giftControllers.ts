@@ -78,12 +78,14 @@ export async function deleteGift(req: Request, res: Response): Promise<void> {
 	try {
 		const { id } = req.params;
 
-		const giftToDelete = await Gift.findByIdAndDelete(id).exec();
+		const giftToDelete = await Gift.findById(id).exec();
 
 		if (!giftToDelete) {
 			res.status(404).json({ message: "Gift not found." });
 			return;
 		}
+
+		await giftToDelete.deleteOne();
 
 		res.status(200).json({
 			message: `Successfully deleted gift with id: ${id}.`,
