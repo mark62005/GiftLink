@@ -18,3 +18,21 @@ export async function getAllGifts(req: Request, res: Response): Promise<void> {
 		res.status(500).json({ message: "Error fetching gifts." });
 	}
 }
+
+export async function getGiftById(req: Request, res: Response): Promise<void> {
+	logger.info("/:id called");
+	try {
+		const { id } = req.params;
+		const gift = await Gift.findById(id);
+
+		if (!gift) {
+			res.status(404).json({ message: "Gift not found." });
+			return;
+		}
+
+		res.status(200).json({ data: gift });
+	} catch (error) {
+		logger.error(error);
+		res.status(500).json({ message: "Error fetching gift by id." });
+	}
+}
