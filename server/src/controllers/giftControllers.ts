@@ -3,7 +3,7 @@ import Gift from "../models/Gift";
 import logger from "../logger";
 
 export async function getAllGifts(req: Request, res: Response): Promise<void> {
-	logger.info("/ called");
+	logger.info("/ GET called");
 	try {
 		const gifts = await Gift.find();
 
@@ -20,7 +20,7 @@ export async function getAllGifts(req: Request, res: Response): Promise<void> {
 }
 
 export async function getGiftById(req: Request, res: Response): Promise<void> {
-	logger.info("/:id called");
+	logger.info("/:id GET called");
 	try {
 		const { id } = req.params;
 		const gift = await Gift.findById(id);
