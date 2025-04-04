@@ -8,6 +8,8 @@ import logger from "./logger";
 import { globalErrorHandler } from "./error";
 import connectToMongoDB from "./db";
 /* IMPORT ROUTES */
+import giftRoutes from "./routes/giftRoutes";
+import searchRoutes from "./routes/searchRoutes";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -27,6 +29,8 @@ app.use(pino({ logger }));
 app.use(globalErrorHandler);
 
 /* ROUTES */
+app.use("/api/gifts", giftRoutes);
+app.use("/api/search", searchRoutes);
 
 /* SERVER */
 const port = process.env.PORT || 5001;
