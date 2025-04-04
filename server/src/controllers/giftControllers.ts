@@ -40,11 +40,15 @@ export async function getGiftById(req: Request, res: Response): Promise<void> {
 export async function createGift(req: Request, res: Response): Promise<void> {
 	logger.info("/ POST called");
 	try {
-		const newGift = req.body;
-		const addedGift = await Gift.insertOne(newGift);
+		const gift = req.body;
+		const newGift = new Gift({
+			...gift,
+		});
+
+		await newGift.save();
 
 		res.status(200).json({
-			message: `Successfully created gift with id: ${addedGift._id}, to database.`,
+			message: `Successfully created gift with id: ${newGift._id}, to database.`,
 		});
 	} catch (error) {
 		logger.error(error);
@@ -65,7 +69,7 @@ export async function updateGift(req: Request, res: Response): Promise<void> {
 		}
 
 		giftToUpdate = { ...giftToUpdate, ...updatedGift };
-		giftToUpdate?.save();
+		await giftToUpdate?.save();
 
 		res.status(200).json({
 			message: `Successfully updated gift with id: ${id}.`,
