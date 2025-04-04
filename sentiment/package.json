@@ -1,0 +1,33 @@
+{
+	"name": "sentiment",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"build": "rimraf dist && npx tsc",
+		"start": "pnpm run build && node dist/index.js",
+		"dev": "pnpm run build && concurrently \"npx tsc -w\" \"nodemon --exec ts-node src/index.ts\""
+	},
+	"keywords": [],
+	"author": "Mark Wong",
+	"license": "ISC",
+	"packageManager": "pnpm@10.7.0",
+	"dependencies": {
+		"axios": "^1.8.4",
+		"dotenv": "^16.4.7",
+		"express": "^5.1.0",
+		"natural": "^8.0.1",
+		"pino": "^9.6.0",
+		"pino-http": "^10.4.0",
+		"pino-pretty": "^13.0.0"
+	},
+	"devDependencies": {
+		"@types/express": "^5.0.1",
+		"@types/node": "^22.14.0",
+		"concurrently": "^9.1.2",
+		"nodemon": "^3.1.9",
+		"rimraf": "^6.0.1",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.8.2"
+	}
+}
