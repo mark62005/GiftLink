@@ -25,7 +25,7 @@ export default function Landing() {
 					enrich and perpetuate both our lives and the lives of others."
 				</p>
 
-				<Link href="/app">
+				<Link href="/gifts">
 					<Button>Get Started</Button>
 				</Link>
 			</div>
