@@ -20,7 +20,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={`${montserratSans.variable} antialiased`}>
+			<body
+				className={`${montserratSans.variable} antialiased relative min-h-screen w-screen`}
+			>
 				<main className="">{children}</main>
 			</body>
 		</html>
