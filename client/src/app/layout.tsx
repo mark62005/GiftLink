@@ -22,7 +22,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={`${montserratSans.variable} antialiased relative min-h-screen w-screen`}
+				className={`${montserratSans.variable} antialiased relative overflow-x-hidden`}
 			>
 				<Providers>{children}</Providers>
 			</body>

@@ -1,13 +1,10 @@
-// import { MAIN_HEIGHT } from "@/lib/constants";
+import GiftsGridSection from "./(sections)/GiftsGridSection";
 
-// function GiftPage() {
-// 	return (
-// 		<main
-// 			className="bg-blue-100"
-// 			style={{ minHeight: MAIN_HEIGHT }}
-// 		>
-// 			<section className="h-[1000px]"></section>
-// 		</main>
-// 	);
-// }
-// export default GiftPage;
+function GiftPage() {
+	return (
+		<>
+			<GiftsGridSection />
+		</>
+	);
+}
+export default GiftPage;
