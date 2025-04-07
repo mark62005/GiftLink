@@ -18,7 +18,7 @@ function GiftCard({ gift }: GiftCardProps) {
 					width={250}
 					height={200}
 					loading="lazy"
-					className="w-full rounded-t-xl object-cover object-center h-[200px] border-b-2"
+					className="w-full rounded-t-xl md:object-cover object-contain object-center h-[200px] border-b-2"
 				/>
 
 				<div className="ml-4">
