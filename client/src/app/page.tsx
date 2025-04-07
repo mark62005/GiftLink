@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Landing() {
 	return (
-		<>
+		<main>
 			<Image
 				src="/background-colors.jpg"
 				alt="Background image of landing page"
@@ -29,6 +29,6 @@ export default function Landing() {
 					<Button>Get Started</Button>
 				</Link>
 			</div>
-		</>
+		</main>
 	);
 }
