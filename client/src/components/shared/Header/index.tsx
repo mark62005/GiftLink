@@ -16,7 +16,7 @@ const NAV_LINKS_CONFIG: NavLinkType[] = [
 
 function Header() {
 	return (
-		<header>
+		<header className="border-b-2 fixed top-0 left-0 right-0 z-2 bg-background">
 			<MaxWidthWrapper>
 				<div
 					className="flex justify-between items-center w-full"
