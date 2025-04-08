@@ -5,6 +5,12 @@ declare global {
 		};
 	}
 
+	export interface UserFields {
+		firstName: string;
+		lastName: string;
+		email: string;
+	}
+
 	namespace Express {
 		interface Request {
 			user?: {
