@@ -5,6 +5,7 @@ import MaxWidthWrapper from "@/components/shared/MaxWidthWrapper";
 import { useGetAllGiftsQuery } from "@/state/api";
 
 const sampleGift: Gift = {
+	_id: "123123133",
 	id: "875",
 	name: "Lamp",
 	category: "Kitchen",
@@ -16,6 +17,8 @@ const sampleGift: Gift = {
 	age_years: 1.1,
 	description: "A charming lamp that's been lighting up my reading nook...",
 	image: "lamp.jpeg",
+	createdAt: new Date(),
+	updatedAt: new Date(),
 };
 
 function GiftsGridSection() {

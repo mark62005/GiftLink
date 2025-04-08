@@ -55,11 +55,21 @@ export const api = createApi({
 	reducerPath: "api",
 	tagTypes: ["Gifts"],
 	endpoints: (build) => ({
+		/* GIFTS */
 		getAllGifts: build.query<Gift[], void>({
 			query: () => "gifts",
 			providesTags: ["Gifts"],
 		}),
+		getGiftById: build.query<Gift, string>({
+			query: (id) => `gifts/${id}`,
+			providesTags: (results, error, id) => [
+				{
+					type: "Gifts",
+					id,
+				},
+			],
+		}),
 	}),
 });
 
-export const { useGetAllGiftsQuery } = api;
+export const { useGetAllGiftsQuery, useGetGiftByIdQuery } = api;

@@ -1,6 +1,7 @@
 declare global {
 	/* GIFTS */
 	interface Gift {
+		_id: string;
 		id: string;
 		name: string;
 		category: string;
@@ -12,6 +13,15 @@ declare global {
 		age_years: number;
 		description: string;
 		image?: string;
+		createdAt: Date;
+		updatedAt: Date;
+	}
+
+	interface GiftComment {
+		_id: string;
+		authorId: string;
+		author: string;
+		content: string;
 	}
 
 	/* UTILS */
