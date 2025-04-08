@@ -10,6 +10,7 @@ import connectToMongoDB from "./db";
 /* IMPORT ROUTES */
 import giftRoutes from "./routes/giftRoutes";
 import searchRoutes from "./routes/searchRoutes";
+import authRoutes from "./routes/authRoutes";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -31,6 +32,7 @@ app.use(globalErrorHandler);
 /* ROUTES */
 app.use("/api/gifts", giftRoutes);
 app.use("/api/search", searchRoutes);
+app.use("/api/auth", authRoutes);
 
 /* SERVER */
 const port = process.env.PORT || 5001;
