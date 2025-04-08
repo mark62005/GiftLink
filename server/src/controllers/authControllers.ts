@@ -7,7 +7,7 @@ import User from "../models/User";
 
 dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET ?? "";
 
 export async function registerUser(req: Request, res: Response): Promise<void> {
 	logger.info("/register POST called");
@@ -48,7 +48,7 @@ export async function registerUser(req: Request, res: Response): Promise<void> {
 			},
 		};
 
-		const authToken = jwt.sign(payload, JWT_SECRET ?? "");
+		const authToken = jwt.sign(payload, JWT_SECRET);
 		res.status(200).json({
 			data: authToken,
 			message: `User with ID: ${newUser._id} has been registered successfully.`,
@@ -56,5 +56,52 @@ export async function registerUser(req: Request, res: Response): Promise<void> {
 	} catch (error) {
 		logger.error(error);
 		res.status(500).json({ message: "Error signing up user.", error });
+	}
+}
+
+export async function signIn(req: Request, res: Response): Promise<void> {
+	logger.info("/sign-in POST called");
+
+	try {
+		const { email, password } = req.body;
+
+		if (!email || !password) {
+			res.status(403).json({
+				message: "Email and password are required.",
+			});
+			return;
+		}
+
+		const targetUser = await User.findOne({ email });
+
+		if (!targetUser) {
+			res.status(404).json({ message: "User not found." });
+			return;
+		} else {
+			const isPasswordMatch = await bcryptjs.compare(
+				password,
+				targetUser.password
+			);
+			if (!isPasswordMatch) {
+				res.status(403).json({ message: "Password does not match." });
+				return;
+			}
+
+			const payload = {
+				user: {
+					id: targetUser._id.toString(),
+				},
+			};
+
+			const firstName = targetUser.firstName;
+			const email = targetUser.email;
+			const authToken = jwt.sign(payload, JWT_SECRET);
+
+			logger.info("User logged in successfully.");
+			res.status(200).json({ firstName, email, authToken });
+		}
+	} catch (error) {
+		logger.error(error);
+		res.status(500).json({ message: "Error signing in user.", error });
 	}
 }
