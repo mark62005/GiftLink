@@ -1,6 +1,9 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { useRegisterUserMutation } from "@/state/api";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MAIN_HEIGHT } from "@/lib/constants";
 import { SignUpFormData, signUpSchema } from "@/lib/schemas";
@@ -11,6 +14,10 @@ import MaxWidthWrapper from "@/components/shared/MaxWidthWrapper";
 import SignInSignUpFormFooter from "@/components/shared/forms/auth/SignInSignUpFormFooter";
 
 function SignUpPage() {
+	const router = useRouter();
+	const { setIsLoggedIn } = useAuthContext();
+	const [registerUser, { isLoading, error }] = useRegisterUserMutation();
+
 	const methods = useForm<SignUpFormData>({
 		resolver: zodResolver(signUpSchema),
 		defaultValues: {
@@ -22,8 +29,14 @@ function SignUpPage() {
 	});
 
 	async function onSubmit(data: SignUpFormData) {
-		console.log("Sign Up Button clicked");
-		console.log(data);
+		const res = await registerUser(data);
+
+		if (!error && res.data) {
+			setIsLoggedIn(!true);
+			router.push("/gifts");
+		}
+
+		// TODO: display error message
 	}
 
 	return (
@@ -65,8 +78,9 @@ function SignUpPage() {
 						<Button
 							type="submit"
 							className="w-full mt-4"
+							disabled={isLoading}
 						>
-							Register
+							{isLoading ? "Loading..." : "Register"}
 						</Button>
 					</form>
 				</Form>

@@ -69,7 +69,36 @@ export const api = createApi({
 				},
 			],
 		}),
+
+		/* AUTH */
+		registerUser: build.mutation<
+			string,
+			{ firstName: string; lastName: string; email: string; password: string }
+		>({
+			query: (body) => ({
+				url: "auth/register",
+				method: "POST",
+				body,
+			}),
+			onQueryStarted: async ({ firstName, email }, { queryFulfilled }) => {
+				try {
+					const { data: authToken } = await queryFulfilled;
+
+					sessionStorage.setItem("auth-token", authToken);
+					sessionStorage.setItem("first-name", firstName);
+					sessionStorage.setItem("email", email);
+				} catch (error) {
+					console.error("Error registering user: ", error);
+
+					// TODO: toast error message
+				}
+			},
+		}),
 	}),
 });
 
-export const { useGetAllGiftsQuery, useGetGiftByIdQuery } = api;
+export const {
+	useGetAllGiftsQuery,
+	useGetGiftByIdQuery,
+	useRegisterUserMutation,
+} = api;
