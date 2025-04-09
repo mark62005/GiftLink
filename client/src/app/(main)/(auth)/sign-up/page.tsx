@@ -15,7 +15,7 @@ import SignInSignUpFormFooter from "@/components/shared/forms/auth/SignInSignUpF
 
 function SignUpPage() {
 	const router = useRouter();
-	const { setIsLoggedIn } = useAuthContext();
+	const { setIsLoggedIn, setUsername } = useAuthContext();
 	const [registerUser, { isLoading, error }] = useRegisterUserMutation();
 
 	const methods = useForm<SignUpFormData>({
@@ -32,7 +32,9 @@ function SignUpPage() {
 		const res = await registerUser(data);
 
 		if (!error && res.data) {
-			setIsLoggedIn(!true);
+			setIsLoggedIn(true);
+			setUsername(data.firstName);
+
 			router.push("/gifts");
 		}
 
