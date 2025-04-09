@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { ICustomJwtPayload, ICustomRequest, IUserProfile } from "../types";
 import logger from "../logger";
 import User from "../models/User";
 
@@ -43,7 +43,7 @@ export async function registerUser(req: Request, res: Response): Promise<void> {
 		});
 		await newUser.save();
 
-		const payload: JwtPayload = {
+		const payload: ICustomJwtPayload = {
 			user: {
 				id: newUser._id.toString(),
 			},
@@ -88,7 +88,7 @@ export async function signIn(req: Request, res: Response): Promise<void> {
 				return;
 			}
 
-			const payload: JwtPayload = {
+			const payload: ICustomJwtPayload = {
 				user: {
 					id: targetUser._id.toString(),
 				},
@@ -108,7 +108,7 @@ export async function signIn(req: Request, res: Response): Promise<void> {
 }
 
 export async function updateUserProfile(
-	req: Request,
+	req: ICustomRequest,
 	res: Response
 ): Promise<void> {
 	logger.info("/update-user PUT called");
@@ -125,7 +125,7 @@ export async function updateUserProfile(
 			return;
 		}
 
-		const updatedUserFiels: Partial<UserFields> = {};
+		const updatedUserFiels: Partial<IUserProfile> = {};
 		if (firstName) updatedUserFiels.firstName = firstName;
 		if (lastName) updatedUserFiels.lastName = lastName;
 		if (email) updatedUserFiels.email = email;

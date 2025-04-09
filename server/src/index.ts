@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
 import pino from "pino-http";
+import "./types";
 import logger from "./logger";
 import { globalErrorHandler } from "./error";
 import connectToMongoDB from "./db";
