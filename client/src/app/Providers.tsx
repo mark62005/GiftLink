@@ -1,6 +1,20 @@
-import { ReactNode } from "react";
-import StoreProvider from "@/state/redux";
-import AuthContextProvider from "@/contexts/AuthContext";
+"use client";
+
+import { ReactNode, useEffect } from "react";
+import StoreProvider, { useAppDispatch } from "@/state/redux";
+import { fetchAuthFromStorage } from "@/state/slices/authSlice";
+
+function HydrateAuth() {
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			dispatch(fetchAuthFromStorage());
+		}
+	}, [dispatch]);
+
+	return null;
+}
 
 function Providers({
 	children,
@@ -9,7 +23,8 @@ function Providers({
 }>) {
 	return (
 		<StoreProvider>
-			<AuthContextProvider>{children}</AuthContextProvider>
+			<HydrateAuth />
+			{children}
 		</StoreProvider>
 	);
 }
