@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch } from "@/state/redux";
-import { useRegisterUserMutation } from "@/state/api";
+import { useRegisterUserMutation } from "@/state/apis/authApi";
 import { loginSucceeded } from "@/state/slices/authSlice";
 import { MAIN_HEIGHT } from "@/lib/constants";
 import { SignUpFormData, signUpSchema } from "@/lib/schemas";
