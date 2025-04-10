@@ -2,9 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { useRegisterUserMutation } from "@/state/api";
-import { useAuthContext } from "@/contexts/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAppDispatch } from "@/state/redux";
+import { useRegisterUserMutation } from "@/state/api";
+import { loginSucceeded } from "@/state/slices/authSlice";
 import { MAIN_HEIGHT } from "@/lib/constants";
 import { SignUpFormData, signUpSchema } from "@/lib/schemas";
 import { Form } from "@/components/ui/form";
@@ -15,8 +16,8 @@ import SignInSignUpFormFooter from "@/components/shared/forms/auth/SignInSignUpF
 
 function SignUpPage() {
 	const router = useRouter();
-	const { setIsLoggedIn, setUsername } = useAuthContext();
-	const [registerUser, { isLoading, error }] = useRegisterUserMutation();
+	const dispatch = useAppDispatch();
+	const [registerUser, { isLoading }] = useRegisterUserMutation();
 
 	const methods = useForm<SignUpFormData>({
 		resolver: zodResolver(signUpSchema),
@@ -29,16 +30,22 @@ function SignUpPage() {
 	});
 
 	async function onSubmit(data: SignUpFormData) {
-		const res = await registerUser(data);
+		try {
+			const token = await registerUser(data).unwrap();
+			const user: User = {
+				firstName: data.firstName,
+				lastName: data.lastName,
+				email: data.email,
+			};
 
-		if (!error && res.data) {
-			setIsLoggedIn(true);
-			setUsername(data.firstName);
-
-			router.push("/gifts");
+			if (token) {
+				dispatch(loginSucceeded({ token, user }));
+				router.push("/gifts");
+			}
+		} catch (error) {
+			console.error("Error registering user: ", error);
+			// TODO: display error message
 		}
-
-		// TODO: display error message
 	}
 
 	return (
