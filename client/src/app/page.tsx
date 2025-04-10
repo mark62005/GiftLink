@@ -21,8 +21,9 @@ export default function Landing() {
 					Share Gifts and Joy!
 				</h2>
 				<p className="text-slate-800 text-lg md:text-xl max-w-2xl mb-8 text-center italic leading-relaxed drop-shadow-sm">
-					"Sharing is the essence of community. It is through giving that we
-					enrich and perpetuate both our lives and the lives of others."
+					&ldquo;Sharing is the essence of community. It is through giving that
+					we enrich and perpetuate both our lives and the lives of
+					others.&ldquo;
 				</p>
 
 				<Link href="/gifts">

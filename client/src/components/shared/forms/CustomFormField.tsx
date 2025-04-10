@@ -32,7 +32,6 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
 	label,
 	type = "text",
 	placeholder,
-	options,
 	className,
 	inputClassName,
 	labelClassName,

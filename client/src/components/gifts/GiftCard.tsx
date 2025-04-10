@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { cn, getFormattedDate } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

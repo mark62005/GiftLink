@@ -2,7 +2,7 @@ import Header from "@/components/shared/Header";
 import { HEADER_HEIGHT, MAIN_HEIGHT } from "@/lib/constants";
 import { ReactNode } from "react";
 
-export default function RootLayout({
+export default function Layout({
 	children,
 }: Readonly<{
 	children: ReactNode;

@@ -4,23 +4,6 @@ import GiftCard from "@/components/gifts/GiftCard";
 import MaxWidthWrapper from "@/components/shared/MaxWidthWrapper";
 import { useGetAllGiftsQuery } from "@/state/apis/giftsApi";
 
-const sampleGift: Gift = {
-	_id: "123123133",
-	id: "875",
-	name: "Lamp",
-	category: "Kitchen",
-	condition: "New",
-	posted_by: "26872",
-	zipcode: "94805",
-	date_added: 1693267200,
-	age_days: 400,
-	age_years: 1.1,
-	description: "A charming lamp that's been lighting up my reading nook...",
-	image: "lamp.jpeg",
-	createdAt: new Date(),
-	updatedAt: new Date(),
-};
-
 function GiftsGridSection() {
 	// const gifts: Gift[] = [sampleGift, sampleGift, sampleGift, sampleGift];
 	const { data: gifts, isLoading, isError } = useGetAllGiftsQuery();
