@@ -1,5 +1,3 @@
-"use client";
-
 import CommentCard from "@/components/gifts/CommentCard";
 
 const sampleComments: GiftComment[] = [
