@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../redux";
@@ -31,6 +32,7 @@ const customBaseQuery = async (
 
 		if (result.error) {
 			const errorData = result.error.data;
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const errorMessage =
 				errorData?.message ||
 				result.error.status.toString() ||
@@ -43,6 +45,7 @@ const customBaseQuery = async (
 			(args as FetchArgs).method && (args as FetchArgs).method !== "GET";
 
 		if (isMutationRequest) {
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const successMessage = result.data?.message;
 
 			// TODO: toast message
@@ -70,5 +73,6 @@ export const baseApi = createApi({
 	baseQuery: customBaseQuery,
 	reducerPath: "api",
 	tagTypes: ["Gifts", "Users"],
-	endpoints: (builder) => ({}),
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	endpoints: (_builder) => ({}),
 });
