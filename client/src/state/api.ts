@@ -1,5 +1,7 @@
 import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { RootState } from "./redux";
+import { STORAGE_KEYS } from "@/lib/constants";
 
 const customBaseQuery = async (
 	args: string | FetchArgs,
@@ -8,6 +10,20 @@ const customBaseQuery = async (
 ): Promise<any> => {
 	const baseQuery = fetchBaseQuery({
 		baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+		prepareHeaders: (headers, { getState }) => {
+			const token =
+				typeof window !== "undefined"
+					? localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN)
+					: null;
+
+			const state = getState() as RootState;
+			const authToken = state.auth.token || token;
+
+			if (authToken) {
+				headers.set("Authorization", `Bearer ${authToken}`);
+			}
+			return headers;
+		},
 	});
 
 	try {
@@ -62,14 +78,67 @@ export const api = createApi({
 		}),
 		getGiftById: build.query<Gift, string>({
 			query: (id) => `gifts/${id}`,
-			providesTags: (results, error, id) => [
+			providesTags: (_results, _error, id) => [
 				{
 					type: "Gifts",
 					id,
 				},
 			],
 		}),
+
+		/* AUTH */
+		registerUser: build.mutation<
+			string,
+			{ firstName: string; lastName: string; email: string; password: string }
+		>({
+			query: (body) => ({
+				url: "auth/register",
+				method: "POST",
+				body,
+			}),
+			onQueryStarted: async ({ firstName, email }, { queryFulfilled }) => {
+				try {
+					const { data: authToken } = await queryFulfilled;
+
+					localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, authToken);
+					localStorage.setItem(STORAGE_KEYS.FIRST_NAME, firstName);
+					localStorage.setItem(STORAGE_KEYS.EMAIL, email);
+				} catch (error) {
+					console.error("Error registering user: ", error);
+
+					// TODO: toast error message
+				}
+			},
+		}),
+		loginUser: build.mutation<
+			{ firstName: string; email: string; authToken: string },
+			{ email: string; password: string }
+		>({
+			query: (body) => ({
+				url: "auth/sign-in",
+				method: "POST",
+				body,
+			}),
+			onQueryStarted: async (_, { queryFulfilled }) => {
+				try {
+					const data = (await queryFulfilled).data;
+
+					localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, data.authToken);
+					localStorage.setItem(STORAGE_KEYS.FIRST_NAME, data.firstName);
+					localStorage.setItem(STORAGE_KEYS.EMAIL, data.email);
+				} catch (error) {
+					console.error("Error signing in user: ", error);
+
+					// TODO: toast error message
+				}
+			},
+		}),
 	}),
 });
 
-export const { useGetAllGiftsQuery, useGetGiftByIdQuery } = api;
+export const {
+	useGetAllGiftsQuery,
+	useGetGiftByIdQuery,
+	useRegisterUserMutation,
+	useLoginUserMutation,
+} = api;

@@ -24,6 +24,13 @@ declare global {
 		content: string;
 	}
 
+	/* USERS */
+	interface User {
+		firstName: string;
+		lastName: string;
+		email: string;
+	}
+
 	/* UTILS */
 	interface NavLinkType {
 		label: string;
