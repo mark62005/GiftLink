@@ -99,7 +99,7 @@ export async function signIn(req: Request, res: Response): Promise<void> {
 			const authToken = jwt.sign(payload, JWT_SECRET);
 
 			logger.info("User logged in successfully.");
-			res.status(200).json({ firstName, email, authToken });
+			res.status(200).json({ data: { firstName, email, authToken } });
 		}
 	} catch (error) {
 		logger.error(error);

@@ -2,7 +2,7 @@
 
 import GiftCard from "@/components/gifts/GiftCard";
 import MaxWidthWrapper from "@/components/shared/MaxWidthWrapper";
-import { useGetAllGiftsQuery } from "@/state/api";
+import { useGetAllGiftsQuery } from "@/state/apis/giftsApi";
 
 const sampleGift: Gift = {
 	_id: "123123133",
