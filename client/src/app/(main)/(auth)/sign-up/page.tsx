@@ -1,7 +1,11 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAppDispatch } from "@/state/redux";
+import { useRegisterUserMutation } from "@/state/apis/authApi";
+import { loginSucceeded } from "@/state/slices/authSlice";
 import { MAIN_HEIGHT } from "@/lib/constants";
 import { SignUpFormData, signUpSchema } from "@/lib/schemas";
 import { Form } from "@/components/ui/form";
@@ -11,6 +15,10 @@ import MaxWidthWrapper from "@/components/shared/MaxWidthWrapper";
 import SignInSignUpFormFooter from "@/components/shared/forms/auth/SignInSignUpFormFooter";
 
 function SignUpPage() {
+	const router = useRouter();
+	const dispatch = useAppDispatch();
+	const [registerUser, { isLoading }] = useRegisterUserMutation();
+
 	const methods = useForm<SignUpFormData>({
 		resolver: zodResolver(signUpSchema),
 		defaultValues: {
@@ -22,8 +30,22 @@ function SignUpPage() {
 	});
 
 	async function onSubmit(data: SignUpFormData) {
-		console.log("Sign Up Button clicked");
-		console.log(data);
+		try {
+			const token = await registerUser(data).unwrap();
+			const user: User = {
+				firstName: data.firstName,
+				lastName: data.lastName,
+				email: data.email,
+			};
+
+			if (token) {
+				dispatch(loginSucceeded({ token, user }));
+				router.push("/gifts");
+			}
+		} catch (error) {
+			console.error("Error registering user: ", error);
+			// TODO: display error message
+		}
 	}
 
 	return (
@@ -65,8 +87,9 @@ function SignUpPage() {
 						<Button
 							type="submit"
 							className="w-full mt-4"
+							disabled={isLoading}
 						>
-							Register
+							{isLoading ? "Loading..." : "Register"}
 						</Button>
 					</form>
 				</Form>

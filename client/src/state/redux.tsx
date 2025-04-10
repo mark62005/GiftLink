@@ -6,19 +6,21 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import globalReducer from "@/state/slices/global";
-import { api } from "@/state/api";
+import authReducer from "@/state/slices/authSlice";
+import { baseApi } from "./apis/baseApi";
 
 /* REDUX STORE */
 const rootReducer = combineReducers({
 	global: globalReducer,
-	[api.reducerPath]: api.reducer,
+	auth: authReducer,
+	[baseApi.reducerPath]: baseApi.reducer,
 });
 
 export const makeStore = () => {
 	return configureStore({
 		reducer: rootReducer,
 		middleware: (getDefaultMiddleware) =>
-			getDefaultMiddleware().concat(api.middleware),
+			getDefaultMiddleware().concat(baseApi.middleware),
 	});
 };
 

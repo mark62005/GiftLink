@@ -1,5 +1,7 @@
 import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { RootState } from "../redux";
+import { STORAGE_KEYS } from "@/lib/constants";
 
 const customBaseQuery = async (
 	args: string | FetchArgs,
@@ -8,6 +10,20 @@ const customBaseQuery = async (
 ): Promise<any> => {
 	const baseQuery = fetchBaseQuery({
 		baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+		prepareHeaders: (headers, { getState }) => {
+			const token =
+				typeof window !== "undefined"
+					? localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN)
+					: null;
+
+			const state = getState() as RootState;
+			const authToken = state.auth.token || token;
+
+			if (authToken) {
+				headers.set("Authorization", `Bearer ${authToken}`);
+			}
+			return headers;
+		},
 	});
 
 	try {
@@ -50,26 +66,9 @@ const customBaseQuery = async (
 	}
 };
 
-export const api = createApi({
+export const baseApi = createApi({
 	baseQuery: customBaseQuery,
 	reducerPath: "api",
-	tagTypes: ["Gifts"],
-	endpoints: (build) => ({
-		/* GIFTS */
-		getAllGifts: build.query<Gift[], void>({
-			query: () => "gifts",
-			providesTags: ["Gifts"],
-		}),
-		getGiftById: build.query<Gift, string>({
-			query: (id) => `gifts/${id}`,
-			providesTags: (results, error, id) => [
-				{
-					type: "Gifts",
-					id,
-				},
-			],
-		}),
-	}),
+	tagTypes: ["Gifts", "Users"],
+	endpoints: (builder) => ({}),
 });
-
-export const { useGetAllGiftsQuery, useGetGiftByIdQuery } = api;
