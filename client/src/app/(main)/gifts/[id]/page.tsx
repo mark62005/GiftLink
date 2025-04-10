@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useGetGiftByIdQuery } from "@/state/api";
+import { useGetGiftByIdQuery } from "@/state/apis/giftsApi";
 import { MAIN_HEIGHT } from "@/lib/constants";
 import MaxWidthWrapper from "@/components/shared/MaxWidthWrapper";
 import DetailsSection from "./(sections)/DetailsSection";
