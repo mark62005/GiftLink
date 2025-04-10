@@ -15,10 +15,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4.2.2
 
-      - name: Setup pnpm
+      - name: Set up pnpm
         uses: pnpm/action-setup@v4.1.0
         with:
           version: 10
+
+      - name: Set up Environment Variables
+        run: echo "NEXT_PUBLIC_API_BASE_URL=${{ secrets.NEXT_PUBLIC_API_BASE_URL }}" >> $GITHUB_ENV
+        env:
+          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
 
       - name: Install Dependencies
         run: |
