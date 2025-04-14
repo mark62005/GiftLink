@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Response } from "express";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -35,15 +35,21 @@ app.use("/api/gifts", giftRoutes);
 app.use("/api/search", searchRoutes);
 app.use("/api/auth", authRoutes);
 
+app.use("/test", (_req, res: Response) => {
+	res.json({ message: "Hello World" });
+});
+
 /* SERVER */
-const port = process.env.PORT || 5001;
+const port = parseInt(process.env.PORT || "5001");
 
 async function main() {
+	console.log("🚀 Entering main function...");
+
 	if (!isProduction) {
 		try {
 			await connectToMongoDB();
 
-			app.listen(port, () => {
+			app.listen(port, "0.0.0.0", () => {
 				console.log(`Server running on port ${port}...`);
 			});
 		} catch (error) {
@@ -52,4 +58,6 @@ async function main() {
 		}
 	}
 }
+
+console.log("🔥 Starting application...");
 main();
